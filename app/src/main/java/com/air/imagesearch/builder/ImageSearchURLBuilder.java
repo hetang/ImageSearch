@@ -25,6 +25,7 @@ import java.util.ArrayList;
  */
 public class ImageSearchURLBuilder {
     private static final String API_BASE_URL = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8";
+    private StringBuilder url;
 
     private AsyncHttpClient client;
     private ArrayList<ImageModel> images;
@@ -34,6 +35,8 @@ public class ImageSearchURLBuilder {
     private ProgressBar spinner;
     private GridView imagesGridView;
     private SwipeRefreshLayout swipeContainer;
+
+    private static final int itemPerPage = 8;
 
     public ImageSearchURLBuilder(ImageSearchAdaptor imgSrhAdaptor, ProgressBar spinner, GridView imagesGridView, SwipeRefreshLayout swipeContainer) {
         this.imgSrhAdaptor = imgSrhAdaptor;
@@ -51,8 +54,12 @@ public class ImageSearchURLBuilder {
     // Method for accessing the search API
     public void getImages(final String query) {
         try {
-            String url = getApiUrl("&q=");
-            client.get(url + URLEncoder.encode(query, "utf-8"), new ImageSearchJSONResponseHandler());
+            url = new StringBuilder(getApiUrl("&q="));
+            url.append(URLEncoder.encode(query, "utf-8"));
+
+            imgSrhAdaptor.clear();
+
+            client.get(url.toString(), new ImageSearchJSONResponseHandler());
             if(imagesGridView != null) {
                 imagesGridView.setVisibility(View.GONE);
             }
@@ -64,6 +71,12 @@ public class ImageSearchURLBuilder {
         }
     }
 
+    public void getNextPageImages(int page) {
+        if(page > 0 && url.length() > 0) {
+            client.get(url.toString() + "&start=" + (page * itemPerPage), new ImageSearchJSONResponseHandler());
+        }
+    }
+
     private class ImageSearchJSONResponseHandler extends JsonHttpResponseHandler {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -72,7 +85,6 @@ public class ImageSearchURLBuilder {
                 if(response != null) {
                     imageResultJSON = response.getJSONObject("responseData").getJSONArray("results");
                     images = ImageModel.fromJson(imageResultJSON);
-                    imgSrhAdaptor.clear();
                     imgSrhAdaptor.addAll(images);
                     imgSrhAdaptor.notifyDataSetChanged();
                 }

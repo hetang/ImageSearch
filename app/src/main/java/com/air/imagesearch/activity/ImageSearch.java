@@ -1,5 +1,7 @@
 package com.air.imagesearch.activity;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,11 +15,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.air.imagesearch.R;
 import com.air.imagesearch.adapters.ImageSearchAdaptor;
 import com.air.imagesearch.builder.ImageSearchURLBuilder;
+import com.air.imagesearch.listners.EndlessScrollListener;
 import com.air.imagesearch.models.ImageModel;
 
 import java.util.ArrayList;
@@ -39,22 +43,33 @@ public class ImageSearch extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_search);
+        setupVariables();
         setupView();
     }
 
-    private void setupView() {
+    private void setupVariables() {
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
-        spinner.setVisibility(View.VISIBLE);
         imagesGridView = (GridView) findViewById(R.id.grVwImages);
-        imagesGridView.setVisibility(View.GONE);
         imageResults = new ArrayList<ImageModel>();
         adaptor = new ImageSearchAdaptor(this, imageResults);
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+    }
+
+    private void setupView() {
+        spinner.setVisibility(View.VISIBLE);
+        imagesGridView.setVisibility(View.GONE);
         imagesGridView.setAdapter(adaptor);
+
+        Typeface fontRingm = Typeface.createFromAsset(this.getAssets(), "fonts/JamesFajardo.ttf");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tolBrMain);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        toolbar.setLogo(R.drawable.ic_logo);
+        mTitle.setTypeface(fontRingm);
+
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -70,6 +85,7 @@ public class ImageSearch extends ActionBarActivity {
 
         builder = new ImageSearchURLBuilder(adaptor, spinner, imagesGridView, swipeContainer);
         builder.getImages(currentQuery);
+        imagesGridView.setOnScrollListener(new EndlessScrollListener(builder));
     }
 
 
@@ -79,6 +95,9 @@ public class ImageSearch extends ActionBarActivity {
         inflater.inflate(R.menu.menu_image_search, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        /*TextView textView = (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        textView.setTextColor(Color.WHITE);*/
+
         searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -112,16 +131,13 @@ public class ImageSearch extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.muSettings:
+                Toast.makeText(this, "Settings Click", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
