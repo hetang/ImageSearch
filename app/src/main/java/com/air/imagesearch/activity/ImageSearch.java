@@ -2,6 +2,7 @@ package com.air.imagesearch.activity;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -21,13 +22,16 @@ import com.air.imagesearch.R;
 import com.air.imagesearch.adapters.ImageSearchAdaptor;
 import com.air.imagesearch.builder.ImageSearchURLBuilder;
 import com.air.imagesearch.listners.EndlessScrollListener;
+import com.air.imagesearch.listners.SettingsDialog;
+import com.air.imagesearch.listners.SettingsDialog.SettingsDialogListener;
 import com.air.imagesearch.models.BuilderDataModel;
 import com.air.imagesearch.models.ImageModel;
+import com.air.imagesearch.models.SettingsModel;
 
 import java.util.ArrayList;
 
 
-public class ImageSearch extends ActionBarActivity {
+public class ImageSearch extends ActionBarActivity implements SettingsDialogListener {
     private String prevQuery;
     private String currentQuery = "android";
 
@@ -39,6 +43,7 @@ public class ImageSearch extends ActionBarActivity {
     private ImageSearchURLBuilder builder;
     private SwipeRefreshLayout swipeContainer;
     private TextView connectionError;
+    private BuilderDataModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +93,14 @@ public class ImageSearch extends ActionBarActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        BuilderDataModel model = new BuilderDataModel();
+        SettingsModel settings = new SettingsModel();
+        model = new BuilderDataModel();
         model.setImgSrhAdaptor(adaptor);
         model.setSpinner(spinner);
         model.setImagesGridView(imagesGridView);
         model.setSwipeContainer(swipeContainer);
         model.setConnectionError(connectionError);
+        model.setSettings(settings);
 
         builder = new ImageSearchURLBuilder(model);
         builder.getImages(currentQuery);
@@ -146,10 +153,20 @@ public class ImageSearch extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.muSettings:
                 Toast.makeText(this, "Settings Click", Toast.LENGTH_SHORT).show();
+                FragmentManager fm = getSupportFragmentManager();
+                SettingsDialog editNameDialog = SettingsDialog.newInstance(model.getSettings());
+                editNameDialog.show(fm, "fragment_settings_dialog");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void onSaveSettingsDialog(SettingsModel settings) {
+        model.setSettings(settings);
+        builder.getImages(currentQuery);
+        Toast.makeText(this, "Hi, " + settings.getImgSize(), Toast.LENGTH_SHORT).show();
     }
 }

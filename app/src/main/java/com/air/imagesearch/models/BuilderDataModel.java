@@ -16,6 +16,15 @@ public class BuilderDataModel {
     private ProgressBar spinner;
     private GridView imagesGridView;
     private SwipeRefreshLayout swipeContainer;
+    private SettingsModel settings;
+
+    public SettingsModel getSettings() {
+        return settings;
+    }
+
+    public void setSettings(SettingsModel settings) {
+        this.settings = settings;
+    }
 
     public TextView getConnectionError() {
         return connectionError;

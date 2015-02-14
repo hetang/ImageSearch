@@ -8,5 +8,44 @@
     <string name="image_results">Image Results</string>
     <string name="actionbar_settings">Settings</string>
     <string name="connection_error">Something went wrong. Please check your Internet connection.</string>
+    <string name="image_size_settings">Image Size</string>
+    <string name="color_filter_settings">Color Filter</string>
 
+    <string name="image_size_prompt">Choose a Image Size</string>
+    <string-array name="image_size_arrays">
+        <item>medium</item>
+        <item>icon</item>
+        <item>small</item>
+        <item>large</item>
+        <item>xlarge</item>
+        <item>xxlarge</item>
+        <item>huge</item>
+    </string-array>
+
+    <string name="color_filter_prompt">Choose a Image Color</string>
+    <string-array name="image_color_arrays">
+        <item></item>
+        <item>black</item>
+        <item>blue</item>
+        <item>brown</item>
+        <item>gray</item>
+        <item>green</item>
+        <item>orange</item>
+        <item>pink</item>
+        <item>purple</item>
+        <item>red</item>
+        <item>teal</item>
+        <item>white</item>
+        <item>yellow</item>
+    </string-array>
+
+    <string name="image_type_prompt">Choose a Image Type</string>
+    <string name="image_type_settings">Image Type</string>
+    <string name="site_filter_settings">Site Filter</string>
+    <string-array name="image_type_arrays">
+        <item>photo</item>
+        <item>face</item>
+        <item>clip art</item>
+        <item>line art</item>
+    </string-array>
 </resources>

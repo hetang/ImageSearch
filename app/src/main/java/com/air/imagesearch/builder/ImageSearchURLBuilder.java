@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.air.imagesearch.adapters.ImageSearchAdaptor;
+import com.air.imagesearch.helpers.ApplicationHelpers;
 import com.air.imagesearch.models.BuilderDataModel;
 import com.air.imagesearch.models.ImageModel;
 import com.loopj.android.http.AsyncHttpClient;
@@ -49,8 +50,22 @@ public class ImageSearchURLBuilder {
         try {
             url = new StringBuilder(getApiUrl("&q="));
             url.append(URLEncoder.encode(query, "utf-8"));
+            String imgSize = dataModel.getSettings().getImgSize();
+            String imgType = dataModel.getSettings().getImgType();
+            String imgColor = dataModel.getSettings().getImgColor();
+            if(!ApplicationHelpers.isEmpty(imgSize)) {
+                url.append("&imgsz=").append(imgSize);
+            }
 
+            if(!ApplicationHelpers.isEmpty(imgType)) {
+                url.append("&imgtype=").append(imgType);
+            }
+
+            if(!ApplicationHelpers.isEmpty(imgColor)) {
+                url.append("&imgcolor=").append(imgColor);
+            }
             dataModel.getImgSrhAdaptor().clear();
+            Log.i("DEBUG", "URL = " + url.toString());
 
             client.get(url.toString(), new ImageSearchJSONResponseHandler());
             GridView imagesGridView = dataModel.getImagesGridView();
@@ -79,11 +94,13 @@ public class ImageSearchURLBuilder {
             try {
                 if(response != null) {
                     Log.i("DEBUG", "response = " + response.toString());
-                    imageResultJSON = response.getJSONObject("responseData").getJSONArray("results");
-                    images = ImageModel.fromJson(imageResultJSON);
-                    dataModel.getConnectionError().setVisibility(View.GONE);
-                    dataModel.getImgSrhAdaptor().addAll(images);
-                    dataModel.getImgSrhAdaptor().notifyDataSetChanged();
+                    if(response.has("responseData")) {
+                        imageResultJSON = response.getJSONObject("responseData").getJSONArray("results");
+                        images = ImageModel.fromJson(imageResultJSON);
+                        dataModel.getConnectionError().setVisibility(View.GONE);
+                        dataModel.getImgSrhAdaptor().addAll(images);
+                        dataModel.getImgSrhAdaptor().notifyDataSetChanged();
+                    }
                 }
             } catch (JSONException e) {
                 // Invalid JSON format, show appropriate error.
