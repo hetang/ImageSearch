@@ -120,7 +120,7 @@ public class ImageSearch extends ActionBarActivity implements SettingsDialogList
         searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
                 currentQuery = query;
                 prevQuery = query;
                 builder.getImages(query);
@@ -152,7 +152,7 @@ public class ImageSearch extends ActionBarActivity implements SettingsDialogList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.muSettings:
-                Toast.makeText(this, "Settings Click", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Settings Click", Toast.LENGTH_SHORT).show();
                 FragmentManager fm = getSupportFragmentManager();
                 SettingsDialog editNameDialog = SettingsDialog.newInstance(model.getSettings());
                 editNameDialog.show(fm, "fragment_settings_dialog");
@@ -167,6 +167,6 @@ public class ImageSearch extends ActionBarActivity implements SettingsDialogList
     public void onSaveSettingsDialog(SettingsModel settings) {
         model.setSettings(settings);
         builder.getImages(currentQuery);
-        Toast.makeText(this, "Hi, " + settings.getImgSize(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Hi, " + settings.getImgSize(), Toast.LENGTH_SHORT).show();
     }
 }
