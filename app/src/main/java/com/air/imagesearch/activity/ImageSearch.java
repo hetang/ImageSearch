@@ -1,6 +1,5 @@
 package com.air.imagesearch.activity;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -22,6 +21,7 @@ import com.air.imagesearch.R;
 import com.air.imagesearch.adapters.ImageSearchAdaptor;
 import com.air.imagesearch.builder.ImageSearchURLBuilder;
 import com.air.imagesearch.listners.EndlessScrollListener;
+import com.air.imagesearch.models.BuilderDataModel;
 import com.air.imagesearch.models.ImageModel;
 
 import java.util.ArrayList;
@@ -38,6 +38,7 @@ public class ImageSearch extends ActionBarActivity {
     private ArrayList<ImageModel> imageResults;
     private ImageSearchURLBuilder builder;
     private SwipeRefreshLayout swipeContainer;
+    private TextView connectionError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +54,18 @@ public class ImageSearch extends ActionBarActivity {
         imageResults = new ArrayList<ImageModel>();
         adaptor = new ImageSearchAdaptor(this, imageResults);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        connectionError = (TextView) findViewById(R.id.txtVwConnectErr);
     }
 
     private void setupView() {
+        Typeface fontJamesFajardo = Typeface.createFromAsset(this.getAssets(), "fonts/JamesFajardo.ttf");
+        Typeface fontRingm = Typeface.createFromAsset(this.getAssets(), "fonts/RINGM.ttf");
+
+        connectionError.setVisibility(View.GONE);
         spinner.setVisibility(View.VISIBLE);
         imagesGridView.setVisibility(View.GONE);
         imagesGridView.setAdapter(adaptor);
-
-        Typeface fontRingm = Typeface.createFromAsset(this.getAssets(), "fonts/JamesFajardo.ttf");
+        connectionError.setTypeface(fontRingm);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tolBrMain);
         setSupportActionBar(toolbar);
@@ -68,7 +73,7 @@ public class ImageSearch extends ActionBarActivity {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
 
         toolbar.setLogo(R.drawable.ic_logo);
-        mTitle.setTypeface(fontRingm);
+        mTitle.setTypeface(fontJamesFajardo);
 
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -83,7 +88,14 @@ public class ImageSearch extends ActionBarActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        builder = new ImageSearchURLBuilder(adaptor, spinner, imagesGridView, swipeContainer);
+        BuilderDataModel model = new BuilderDataModel();
+        model.setImgSrhAdaptor(adaptor);
+        model.setSpinner(spinner);
+        model.setImagesGridView(imagesGridView);
+        model.setSwipeContainer(swipeContainer);
+        model.setConnectionError(connectionError);
+
+        builder = new ImageSearchURLBuilder(model);
         builder.getImages(currentQuery);
         imagesGridView.setOnScrollListener(new EndlessScrollListener(builder));
     }

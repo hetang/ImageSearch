@@ -1,12 +1,14 @@
 package com.air.imagesearch.builder;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.air.imagesearch.adapters.ImageSearchAdaptor;
+import com.air.imagesearch.models.BuilderDataModel;
 import com.air.imagesearch.models.ImageModel;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -30,20 +32,11 @@ public class ImageSearchURLBuilder {
     private AsyncHttpClient client;
     private ArrayList<ImageModel> images;
 
-    private ListView lvBooks;
-    private ImageSearchAdaptor imgSrhAdaptor;
-    private ProgressBar spinner;
-    private GridView imagesGridView;
-    private SwipeRefreshLayout swipeContainer;
-
     private static final int itemPerPage = 8;
+    private BuilderDataModel dataModel;
 
-    public ImageSearchURLBuilder(ImageSearchAdaptor imgSrhAdaptor, ProgressBar spinner, GridView imagesGridView, SwipeRefreshLayout swipeContainer) {
-        this.imgSrhAdaptor = imgSrhAdaptor;
-        this.spinner = spinner;
-        this.imagesGridView = imagesGridView;
-        this.swipeContainer = swipeContainer;
-
+    public ImageSearchURLBuilder(BuilderDataModel dataModel) {
+        this.dataModel = dataModel;
         this.client = new AsyncHttpClient();
     }
 
@@ -57,12 +50,14 @@ public class ImageSearchURLBuilder {
             url = new StringBuilder(getApiUrl("&q="));
             url.append(URLEncoder.encode(query, "utf-8"));
 
-            imgSrhAdaptor.clear();
+            dataModel.getImgSrhAdaptor().clear();
 
             client.get(url.toString(), new ImageSearchJSONResponseHandler());
+            GridView imagesGridView = dataModel.getImagesGridView();
             if(imagesGridView != null) {
                 imagesGridView.setVisibility(View.GONE);
             }
+            ProgressBar spinner = dataModel.getSpinner();
             if(spinner != null) {
                 spinner.setVisibility(View.VISIBLE);
             }
@@ -83,23 +78,29 @@ public class ImageSearchURLBuilder {
             JSONArray imageResultJSON = null;
             try {
                 if(response != null) {
+                    Log.i("DEBUG", "response = " + response.toString());
                     imageResultJSON = response.getJSONObject("responseData").getJSONArray("results");
                     images = ImageModel.fromJson(imageResultJSON);
-                    imgSrhAdaptor.addAll(images);
-                    imgSrhAdaptor.notifyDataSetChanged();
+                    dataModel.getConnectionError().setVisibility(View.GONE);
+                    dataModel.getImgSrhAdaptor().addAll(images);
+                    dataModel.getImgSrhAdaptor().notifyDataSetChanged();
                 }
             } catch (JSONException e) {
                 // Invalid JSON format, show appropriate error.
                 e.printStackTrace();
             }
 
+            SwipeRefreshLayout swipeContainer = dataModel.getSwipeContainer();
             if(swipeContainer != null) {
                 swipeContainer.setRefreshing(false);
             }
+
+            ProgressBar spinner = dataModel.getSpinner();
             if(spinner != null) {
                 spinner.setVisibility(View.GONE);
             }
 
+            GridView imagesGridView = dataModel.getImagesGridView();
             if(imagesGridView != null) {
                 imagesGridView.setVisibility(View.VISIBLE);
             }
@@ -107,15 +108,22 @@ public class ImageSearchURLBuilder {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+
+            SwipeRefreshLayout swipeContainer = dataModel.getSwipeContainer();
             if(swipeContainer != null) {
                 swipeContainer.setRefreshing(false);
             }
+
+            ProgressBar spinner = dataModel.getSpinner();
             if(spinner != null) {
                 spinner.setVisibility(View.GONE);
             }
+
+            GridView imagesGridView = dataModel.getImagesGridView();
             if(imagesGridView != null) {
-                imagesGridView.setVisibility(View.VISIBLE);
+                imagesGridView.setVisibility(View.GONE);
             }
+            dataModel.getConnectionError().setVisibility(View.VISIBLE);
             super.onFailure(statusCode, headers, throwable, errorResponse);
         }
     }

@@ -60,12 +60,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView"
+        android:text="@string/connection_error"
+        android:id="@+id/txtVwConnectErr"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/swipeContainer"
         android:layout_alignStart="@+id/swipeContainer"
         android:layout_alignRight="@+id/swipeContainer"
-        android:layout_alignEnd="@+id/swipeContainer" />
+        android:layout_alignEnd="@+id/swipeContainer"
+        android:gravity="center_vertical|center_horizontal"
+        android:minLines="2"
+        android:textColor="#850305"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:textAlignment="center" />
 
 </RelativeLayout>

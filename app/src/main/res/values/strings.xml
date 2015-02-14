@@ -7,5 +7,6 @@
     <string name="image_title">Image Title</string>
     <string name="image_results">Image Results</string>
     <string name="actionbar_settings">Settings</string>
+    <string name="connection_error">Something went wrong. Please check your Internet connection.</string>
 
 </resources>
