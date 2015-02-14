@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.air.imagesearch.R;
 import com.air.imagesearch.adapters.ImageSearchAdaptor;

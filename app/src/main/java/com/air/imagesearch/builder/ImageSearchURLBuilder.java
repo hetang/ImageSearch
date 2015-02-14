@@ -4,10 +4,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.air.imagesearch.adapters.ImageSearchAdaptor;
 import com.air.imagesearch.helpers.ApplicationHelpers;
 import com.air.imagesearch.models.BuilderDataModel;
 import com.air.imagesearch.models.ImageModel;
