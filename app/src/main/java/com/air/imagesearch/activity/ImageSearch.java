@@ -28,6 +28,7 @@ import com.air.imagesearch.listners.SettingsDialog.SettingsDialogListener;
 import com.air.imagesearch.models.BuilderDataModel;
 import com.air.imagesearch.models.ImageModel;
 import com.air.imagesearch.models.SettingsModel;
+import com.etsy.android.grid.StaggeredGridView;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class ImageSearch extends ActionBarActivity implements SettingsDialogList
     private String prevQuery;
     private String currentQuery = "android";
 
-    private GridView imagesGridView;
+    private StaggeredGridView imagesGridView;
     private ProgressBar spinner;
     private ImageSearchAdaptor adaptor;
 
@@ -56,7 +57,7 @@ public class ImageSearch extends ActionBarActivity implements SettingsDialogList
 
     private void setupVariables() {
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
-        imagesGridView = (GridView) findViewById(R.id.grVwImages);
+        imagesGridView = (StaggeredGridView) findViewById(R.id.grVwImages);
         imageResults = new ArrayList<ImageModel>();
         adaptor = new ImageSearchAdaptor(this, imageResults);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);

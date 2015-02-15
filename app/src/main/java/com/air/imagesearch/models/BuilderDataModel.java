@@ -6,6 +6,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.air.imagesearch.adapters.ImageSearchAdaptor;
+import com.etsy.android.grid.StaggeredGridView;
 
 /**
  * Created by hetashah on 2/13/15.
@@ -14,7 +15,7 @@ public class BuilderDataModel {
     private TextView connectionError;
     private ImageSearchAdaptor imgSrhAdaptor;
     private ProgressBar spinner;
-    private GridView imagesGridView;
+    private StaggeredGridView imagesGridView;
     private SwipeRefreshLayout swipeContainer;
     private SettingsModel settings;
 
@@ -50,11 +51,11 @@ public class BuilderDataModel {
         this.spinner = spinner;
     }
 
-    public GridView getImagesGridView() {
+    public StaggeredGridView getImagesGridView() {
         return imagesGridView;
     }
 
-    public void setImagesGridView(GridView imagesGridView) {
+    public void setImagesGridView(StaggeredGridView imagesGridView) {
         this.imagesGridView = imagesGridView;
     }
 

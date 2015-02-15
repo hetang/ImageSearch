@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import com.air.imagesearch.helpers.ApplicationHelpers;
 import com.air.imagesearch.models.BuilderDataModel;
 import com.air.imagesearch.models.ImageModel;
+import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -66,7 +67,7 @@ public class ImageSearchURLBuilder {
             Log.i("DEBUG", "URL = " + url.toString());
 
             client.get(url.toString(), new ImageSearchJSONResponseHandler());
-            GridView imagesGridView = dataModel.getImagesGridView();
+            StaggeredGridView imagesGridView = dataModel.getImagesGridView();
             if(imagesGridView != null) {
                 imagesGridView.setVisibility(View.GONE);
             }
@@ -115,7 +116,7 @@ public class ImageSearchURLBuilder {
                 spinner.setVisibility(View.GONE);
             }
 
-            GridView imagesGridView = dataModel.getImagesGridView();
+            StaggeredGridView imagesGridView = dataModel.getImagesGridView();
             if(imagesGridView != null) {
                 imagesGridView.setVisibility(View.VISIBLE);
             }
@@ -134,7 +135,7 @@ public class ImageSearchURLBuilder {
                 spinner.setVisibility(View.GONE);
             }
 
-            GridView imagesGridView = dataModel.getImagesGridView();
+            StaggeredGridView imagesGridView = dataModel.getImagesGridView();
             if(imagesGridView != null) {
                 imagesGridView.setVisibility(View.GONE);
             }
