@@ -15,6 +15,7 @@ Completed user stories:
  * [x] User can tap on any image in results to see the image full-screen
  * [x] User can scroll down “infinitely” to continue loading more image results (up to 8 pages)
  * [x] Advanced: Robust error handling, check if internet is available, handle error cases, network failures
+ * [x] Advanced: Adding Swipe to refresh and keeping settings filter applied
  * [x] Advanced: Use the ActionBar SearchView or custom layout as the query box instead of an EditText
  * [x] Advanced: User can share an image to their friends or email it to themselves
  * [x] Advanced: Replace Filter Settings Activity with a lightweight modal overlay
