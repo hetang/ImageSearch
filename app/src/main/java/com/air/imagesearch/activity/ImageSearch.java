@@ -1,5 +1,6 @@
 package com.air.imagesearch.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -104,6 +106,15 @@ public class ImageSearch extends ActionBarActivity implements SettingsDialogList
         builder = new ImageSearchURLBuilder(model);
         builder.getImages(currentQuery);
         imagesGridView.setOnScrollListener(new EndlessScrollListener(builder));
+        imagesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent imgDisplay = new Intent(ImageSearch.this, ImageDisplay.class);
+                ImageModel model = imageResults.get(position);
+                imgDisplay.putExtra("url", model.getUrl());
+                startActivity(imgDisplay);
+            }
+        });
     }
 
 

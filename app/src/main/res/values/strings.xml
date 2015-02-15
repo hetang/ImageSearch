@@ -10,8 +10,8 @@
     <string name="connection_error">Something went wrong. Please check your Internet connection.</string>
     <string name="image_size_settings">Image Size</string>
     <string name="color_filter_settings">Color Filter</string>
-
     <string name="image_size_prompt">Choose a Image Size</string>
+
     <string-array name="image_size_arrays">
         <item>medium</item>
         <item>icon</item>
@@ -23,8 +23,9 @@
     </string-array>
 
     <string name="color_filter_prompt">Choose a Image Color</string>
+
     <string-array name="image_color_arrays">
-        <item></item>
+        <item/>
         <item>black</item>
         <item>blue</item>
         <item>brown</item>
@@ -42,10 +43,17 @@
     <string name="image_type_prompt">Choose a Image Type</string>
     <string name="image_type_settings">Image Type</string>
     <string name="site_filter_settings">Site Filter</string>
+    <string name="btn_apply">Apply</string>
+    <string name="btn_cancel">Cancel</string>
+
     <string-array name="image_type_arrays">
         <item>photo</item>
         <item>face</item>
         <item>clip art</item>
         <item>line art</item>
     </string-array>
+
+    <string name="title_activity_image_display">ImageDisplay</string>
+    <string name="share_img">Share Image</string>
+
 </resources>
